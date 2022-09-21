@@ -1,15 +1,12 @@
-// Global variables
 var namearray = "";
 var foundname = "";
 let signedin = true;
 
-// Format check on qr input
 function useRegex(input) {
     let regex = /^\d\d\d\d\d[a-zA-Z][a-zA-Z]$/;
     return regex.test(input);
 }
 
-// Read cookie from cookie name - returns cookie data
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -26,7 +23,6 @@ function getCookie(cname) {
     return "";
 }
 
-// Loads array from cookie
 function loadarray() {
     if (getCookie("names") == "") {
         namearray = [
@@ -39,7 +35,6 @@ function loadarray() {
     }
 }
 
-// I have no idea it just works???????!!!111???!1
 function makeApiCall(qr, club) {
     var params = {
         // The ID of the spreadsheet to update.
@@ -73,7 +68,6 @@ function makeApiCall(qr, club) {
     });
 }
 
-// sign into google maybe?
 function initClient() {
     var API_KEY = 'AIzaSyAm02zc16ma4fmsHi-a34Kcze0C9rc19wk';
 
@@ -127,7 +121,6 @@ function setCookie(cname, cvalue, exdays) {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
-// signs u out
 function handleSignOutClick(event) {
     gapi.auth2.getAuthInstance().signOut();
     updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get())
@@ -172,7 +165,6 @@ function addData(event) {
 
 }
 
-// instascan example code but i put it in a function 
 function qrscanner() {
     var out = "";
     var scanner = new Instascan.Scanner({
@@ -202,7 +194,6 @@ function qrscanner() {
     });
 }
 
-// make table thing from list
 function updateTable(namearray) {
     document.getElementById("table").innerHTML = "";
 
@@ -210,12 +201,12 @@ function updateTable(namearray) {
         var result = "<div style='overflow-x:auto;' style='overflow-y:auto;'><table>";
         for (var i = 0; i < myArray.length; i++) {
             result += "<tr>";
-            for (var j = 0; j < myArray[i].length; j++) {
-                result += "<td>" + myArray[i][j] + "</td>";
+            for (var j = 0; j < myArray[myArray.length-(i+1)].length; j++) {
+                result += "<td>" + myArray[myArray.length-(i+1)][j] + "</td>";
             }
             result += "</tr>";
         }
-        result += "</table>";
+        result += "</table></div>";
 
         return result;
     }
