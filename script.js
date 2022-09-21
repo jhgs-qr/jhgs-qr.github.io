@@ -97,32 +97,29 @@ function handleClientLoad() {
     gapi.load('client:auth2', initClient);
 }
 
-// are you signed in? thats a rhetorical question by the way
 function updateSignInStatus(isSignedIn) {
     if (isSignedIn) {
         document.getElementById("signin-button").style.display = "none";
         document.getElementById("clubLabel").style.display = "initial";
         document.getElementById("clubPicked").style.display = "initial";
         document.getElementById("cookiesconsent").style.display = "none";
+        document.getElementById("signout-button").style.display = "initial";
         signedin = true;
     } else {
         document.getElementById("signedIn").innerHTML = "Signed out";
         document.getElementById("clubLabel").style.display = "none";
         document.getElementById("clubPicked").style.display = "none";
         document.getElementById("signout-button").style.display = "none";
+        document.getElementById("signin-button").style.display = "initial";
         signedin = false;
     }
 }
 
-// signs you in probably
 function handleSignInClick(event) {
     gapi.auth2.getAuthInstance().signIn();
-    document.getElementById("signout-button").style.display = "initial";
-
+    updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get())
 }
 
-// makes cookie mmmmmmmmmm
-// also google gonna break cookies in 2023 good luck fixing this LLLLL
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -133,11 +130,10 @@ function setCookie(cname, cvalue, exdays) {
 // signs u out
 function handleSignOutClick(event) {
     gapi.auth2.getAuthInstance().signOut();
-    document.getElementById("signin-button").style.display = "initial";
+    updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get())
 }
 
-// function that adds data to spreadsheet 
-// if u figure out what event is pls tell me
+
 function addData(event) {
     var duplicate = false;
     var qr = foundname;
@@ -211,7 +207,7 @@ function updateTable(namearray) {
     document.getElementById("table").innerHTML = "";
 
     function makeTableHTML(myArray) {
-        var result = "<table>";
+        var result = "<div style='overflow-x:auto;' style='overflow-y:auto;'><table>";
         for (var i = 0; i < myArray.length; i++) {
             result += "<tr>";
             for (var j = 0; j < myArray[i].length; j++) {
@@ -229,7 +225,6 @@ function updateTable(namearray) {
     tablediv.insertAdjacentHTML('afterbegin', tablecontents);
 }
 
-// i forgor 💀
 function clubspickermaker(data) {
     var sel = document.getElementById("clubPicked");
     for (var i = 0; i < clubs.length; i++) {
